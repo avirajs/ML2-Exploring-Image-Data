@@ -7,6 +7,33 @@ import glob
 
 
 
+# Data Preparation (10 points total)
+# [5 points] Read in your images as numpy arrays. Resize and recolor images as necessary.
+images = []
+for filename in glob.glob('./Image_Sample/*.png'):
+    print( filename)
+    img = mpimg.imread(f'{filename}')
+    images.append(rgb2gray(img))
+
+# [1 points] Visualize several images.
+imgplot = plt.imshow(images[(np.random.choice(len(images)))])
+
+
+##each row is in its own right now so we must flatten
+h, w = images[0].shape
+#each pixel now has a value
+print(len(images[0].flatten()))
+# [4 points] Linearize the images to create a table of 1-D image features (each row should be one image).
+images_features = []
+for image in images:
+    images_features.append(image.flatten())
+print(images_features)
+
+
+
+
+
+
 
 
 
