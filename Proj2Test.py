@@ -63,8 +63,47 @@ X= images_features
 print(type(X))
 pca = PCA(n_components=n_components)
 pca.fit(X.copy())
-eigenfaces = pca.components_.reshape((n_components, h, w))
 plot_explained_variance(pca)
+lin_dim_eig = pca.components_.reshape((n_components, h, w))
+def plot_gallery(images , h, w, n_row=3, n_col=6):
+    """Helper function to plot a gallery of portraits"""
+    plt.figure(figsize=(1.7 * n_col, 2.3 * n_row))
+    plt.subplots_adjust(bottom=0, left=.01, right=.99, top=.90, hspace=.35)
+    for i in range(len(images)):
+        plt.subplot(n_row, n_col, i + 1)
+        plt.imshow(images[i].reshape((h, w)), cmap=plt.cm.gray)
+
+        plt.xticks(())
+        plt.yticks(())
+
+plot_gallery(X, h, w)
+
+
+imgplot = plt.imshow(lin_dim_eig[2])
+
+plot_gallery(lin_dim_eig, h, w)
+
+
+
+def reconstruct_image(trans_obj,org_features):
+    low_rep = trans_obj.transform(org_features)
+    rec_image = trans_obj.inverse_transform(low_rep)
+    return low_rep, rec_image
+
+idx_to_reconstruct = 1
+X_idx = X[idx_to_reconstruct]
+low_dimensional_representation, reconstructed_image = reconstruct_image(pca,X_idx.reshape(1, -1))
+
+
+plt.subplot(1,2,1)
+plt.imshow(X_idx.reshape((h, w)), cmap=plt.cm.gray)
+plt.title('Original')
+plt.grid()
+plt.subplot(1,2,2)
+plt.imshow(reconstructed_image.reshape((h, w)), cmap=plt.cm.gray)
+plt.title('Reconstructed from Full PCA')
+plt.grid()
+
 
 # [5 points] Perform non-linear dimensionality reduction of your image data.
 
