@@ -106,9 +106,33 @@ plt.grid()
 
 
 # [5 points] Perform non-linear dimensionality reduction of your image data.
+from sklearn.decomposition import KernelPCA
+
+n_components = 300
+print ("Extracting the top %d eigenfaces from %d faces, not calculating inverse transform" % (n_components, len(X)))
+
+kpca = KernelPCA(n_components=n_components, kernel='rbf',
+                fit_inverse_transform=True, gamma=12, # very sensitive to the gamma parameter,
+                remove_zero_eig=True)
+kpca.fit(X.copy())
 
 
+idx_to_reconstruct = 2
+X_idx = X[idx_to_reconstruct]
+low_dimensional_representation, reconstructed_image = reconstruct_image(kpca,X_idx.reshape(1, -1))
 
+
+plt.subplot(1,2,1)
+plt.imshow(X_idx.reshape((h, w)), cmap=plt.cm.gray)
+plt.title('Original')
+plt.grid()
+plt.subplot(1,2,2)
+plt.imshow(reconstructed_image.reshape((h, w)), cmap=plt.cm.gray)
+plt.title('Reconstructed from Kernal PCA')
+plt.grid()
+
+
+np.array(np.mat("2 2 2; 3 4 4")).shape[0]
 
 
 # [20 points]  Compare the representation using non-linear dimensions to using linear dimensions.
