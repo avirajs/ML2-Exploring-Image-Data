@@ -1,2 +1,5 @@
+*.png
 /test_images.zip
+/test_animals
+/test_non_animals
 /test_images
